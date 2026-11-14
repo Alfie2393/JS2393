@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bento Box Design</title>
+</head>
+<body>
+  <div id="bento-box"></div>
+
+  <script>
+  (() => {
+    const mount = document.getElementById("bento-box");
+    if (!mount) {
+      console.error('Bento box: add <div id="bento-box"></div> to your page first.');
+      return;
+    }
+
+    const styles = `
+      #bento-box, #bento-box * { box-sizing: border-box; }
+
+      #bento-box {
+        --bento-ink: #20231f;
+        --bento-muted: #72766f;
+        --bento-radius: 24px;
+        color: var(--bento-ink);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 1080px;
+        margin: 40px auto;
+        padding: 20px;
+      }
+
+      #bento-box .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-auto-rows: 180px;
+        gap: 16px;
+      }
+
+      #bento-box .bento-card {
+        position: relative;
+        overflow: hidden;
+        padding: 24px;
+        border-radius: var(--bento-radius);
+        background: #f2f1eb;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        transition: transform 180ms ease, box-shadow 180ms ease;
+      }
+
+      #bento-box .bento-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 32px rgb(32 35 31 / 10%);
+      }
+
+      #bento-box .bento-card h2,
+      #bento-box .bento-card p { margin: 0; }
+
+      #bento-box .bento-card h2 {
+        font-size: clamp(20px, 3vw, 30px);
+        line-height: 1.1;
+        letter-spacing: -0.04em;
+      }
+
+      #bento-box .bento-card p {
+        color: var(--bento-muted);
+        font-size: 14px;
+        line-height: 1.5;
+      }
+
+      #bento-box .bento-label {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        opacity: 0.75;
+      }
+
+      #bento-box .bento-feature {
+        grid-column: span 2;
+        grid-row: span 2;
+        background: #d7edc4;
+      }
+
+      #bento-box .bento-feature p { max-width: 260px; }
+
+      #bento-box .bento-orb {
+        position: absolute;
+        width: 190px;
+        height: 190px;
+        right: -24px;
+        bottom: -48px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #f8ffd8, #8cbf70 72%);
+        box-shadow: inset -12px -14px 28px rgb(39 88 47 / 15%);
+      }
+
+      #bento-box .bento-stat {
+        background: #f5c7a8;
+        align-items: flex-start;
+      }
+
+      #bento-box .bento-number {
+        font-size: 56px;
+        line-height: 1;
+        font-weight: 750;
+        letter-spacing: -0.07em;
+      }
+
+      #bento-box .bento-dark {
+        background: #252b27;
+        color: #f7f5ed;
+      }
+
+      #bento-box .bento-dark p { color: #c3c8bf; }
+
+      #bento-box .bento-button {
+        align-self: flex-start;
+        padding: 10px 15px;
+        border: 0;
+        border-radius: 999px;
+        background: #f7f5ed;
+        color: #252b27;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 650;
+        cursor: pointer;
+      }
+
+      #bento-box .bento-button:hover { background: #d7edc4; }
+
+      #bento-box .bento-wide {
+        grid-column: span 2;
+        background: #d8d8f6;
+      }
+
+      #bento-box .bento-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        width: fit-content;
+        padding: 8px 12px;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 55%);
+        font-size: 13px;
+        font-weight: 650;
+      }
+
+      #bento-box .bento-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #56a66b;
+      }
+
+      @media (max-width: 700px) {
+        #bento-box .bento-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          grid-auto-rows: 170px;
+          gap: 12px;
+        }
+
+        #bento-box .bento-card { padding: 18px; }
+        #bento-box .bento-feature { grid-column: span 2; }
+        #bento-box .bento-wide { grid-column: span 2; }
+      }
+
+      @media (max-width: 420px) {
+        #bento-box .bento-grid { grid-auto-rows: 155px; }
+        #bento-box .bento-number { font-size: 46px; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        #bento-box .bento-card { transition: none; }
+      }
+    `;
+
+    const style = document.createElement("style");
+    style.textContent = styles;
+    document.head.appendChild(style);
+
+    mount.innerHTML = `
+      <div class="bento-grid">
+        <article class="bento-card bento-feature">
+          <span class="bento-label">A little more focus</span>
+          <div>
+            <h2>Make room<br>for good ideas.</h2>
+            <p>A flexible bento layout for showcasing your product, work, or latest updates.</p>
+          </div>
+          <div class="bento-orb" aria-hidden="true"></div>
+        </article>
+
+        <article class="bento-card bento-stat">
+          <span class="bento-label">Projects completed</span>
+          <strong class="bento-number">128</strong>
+          <p>And counting.</p>
+        </article>
+
+        <article class="bento-card bento-dark">
+          <span class="bento-label">Ready when you are</span>
+          <h2>Let’s build<br>something.</h2>
+          <button class="bento-button" type="button">Get in touch</button>
+        </article>
+
+        <article class="bento-card bento-wide">
+          <span class="bento-label">Currently working on</span>
+          <div>
+            <h2>Good things take shape.</h2>
+            <p>Fresh ideas, thoughtful details, and a little bit of play.</p>
+          </div>
+          <span class="bento-pill"><span class="bento-dot"></span> Available for projects</span>
+        </article>
+
+        <article class="bento-card">
+          <span class="bento-label">Based in</span>
+          <h2>Brooklyn,<br>NYC</h2>
+          <p>Working everywhere.</p>
+        </article>
+      </div>
+    `;
+
+    mount.querySelector(".bento-button").addEventListener("click", () => {
+      window.location.href = "mailto:hello@example.com";
+    });
+  })();
+  </script>
+</body>
+</html>
